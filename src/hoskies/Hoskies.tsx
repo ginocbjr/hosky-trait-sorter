@@ -54,8 +54,9 @@ function Hoskies() {
     const { address } = useParams();
     useEffect(() => {
         if (address) {
-            getHoskies(address).then((res) => {
-                const result = sortHoskies(res);
+            const [ add, farm ] = address.split(".");
+            getHoskies(add).then((res) => {
+                const result = sortHoskies(res, farm);
                 dispatch({ type: 'CALL_API_SUCCESS', data: result });
             }).catch((err: Error) => {
                 dispatch({ type: 'CALL_API_ERROR', data: [], error: err.message });

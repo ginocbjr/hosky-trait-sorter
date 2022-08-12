@@ -4,7 +4,7 @@ function HoskyPool(props: HoskyPoolProps) {
     return (
         <Card style={{ width: '30rem'}}>
             <Card.Body>
-                <Card.Header>{props.name}</Card.Header>
+                <Card.Header>{`${props.name} (${props.hoskies.length})`}</Card.Header>
                 <ListGroup>
                     {getHoskies(props.hoskies)}
                 </ListGroup>

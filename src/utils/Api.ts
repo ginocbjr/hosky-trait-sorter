@@ -34,7 +34,7 @@ export async function getHoskies(address: string): Promise<HoskyData> {
   };
 }
 
-export function sortHoskies(data: HoskyData): HoskyPoolProps[] {
+export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
   const result: TaskResult = {
     NONE: [],
   };
@@ -105,7 +105,19 @@ export function sortHoskies(data: HoskyData): HoskyPoolProps[] {
       return false;
     });
     if (found.length > 0) {
-      found.forEach((farm) => {
+      let checkFarm = false;
+      found.forEach((f) => {
+        if (farm && farm === f.name) {
+          checkFarm = true;
+          return;
+        }
+      });
+      found.filter((f) => {
+        if (farm && checkFarm) {
+          return f.name === farm;
+        }
+        return true;
+      }).forEach((farm) => {
         if (!result[farm.name]) {
           result[farm.name] = [];
         }
