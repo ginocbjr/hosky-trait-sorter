@@ -1,4 +1,4 @@
-import { CardGroup, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import HoskyPool, { HoskyPoolProps } from "./HoskyPool";
 
 function Pools(props: PoolsProps) {

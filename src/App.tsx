@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Routes, Route, HashRouter as Router } from 'react-router-dom';

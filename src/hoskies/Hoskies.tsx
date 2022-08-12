@@ -62,7 +62,7 @@ function Hoskies() {
                 dispatch({ type: 'CALL_API_ERROR', data: [], error: err.message });
             });
         }
-    }, []);
+    }, [address]);
     return (
         <Pools hoskies={data} />
     )
