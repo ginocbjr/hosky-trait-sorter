@@ -141,6 +141,68 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
   });
 }
 
+export async function getListing(ids: string[]): Promise<HoskyData> {
+  const result = await Promise.all(ids.map(async (id) => {
+    const { data } = await axios.get<ListingResponse>(`https://server.jpgstoreapis.com/listing/${id}`);
+    return data;
+  }));
+  // const { data } = await axios.get<ListingResponse>(`https://server.jpgstoreapis.com/listing/${ids}`);
+  const tokens: Nft[] = result.map((res) => res.tokens);
+  const hoskyTokens = tokens
+    .filter(
+      (token) =>
+        token.policy_id ===
+        "a5bb0e5bb275a573d744a021f9b3bff73595468e002755b447e01559"
+    )
+    .map<HoskyToken>((token) => {
+      return {
+        display_name: token.display_name,
+        fingerprint: token.fingerprint,
+        name: token.display_name,
+        metadata: token.onchain_metadata,
+        policy: token.policy_id,
+        traits: {
+          traitcount: token.onchain_metadata["-----traits-----"].length,
+          ...token.onchain_metadata["-----traits-----"].reduce(
+            (orig, trait) => ({
+              ...orig,
+              [Object.keys(trait)[0]]: Object.values(trait)[0].toLowerCase(),
+            }),
+            {}
+          ),
+        },
+      };
+    });
+  return {
+    tokens: hoskyTokens,
+  };
+}
+
+export type ListingResponse = {
+  tokens: Nft;
+}
+
+export type Nft = {
+  asset_id: string;
+  policy_id: string;
+  display_name: string;
+  onchain_metadata: HoskyMetadata;
+  fingerprint: string;
+  traits: {
+    traitcount: number;
+    '-----traits----- / Background'?: string;
+    '-----traits----- / Fur'?: string;
+    '-----traits----- / Ear'?: string;
+    '-----traits----- / Mouth Decoration'?: string;
+    '-----traits----- / Hat'?: string;
+    '-----traits----- / Neck'?: string;
+    '-----traits----- / Eyes'?: string;
+    '-----traits----- / Frame'?: string;
+    '-----traits----- / Glasses'?: string;
+    '-----traits----- / Mouth'?: string;
+  }
+}
+
 export type PoolPmData = {
   addr: string;
   tokens: Token[];
@@ -154,7 +216,7 @@ export type Token = {
 };
 
 export interface HoskyData {
-  addr: string;
+  addr?: string;
   tokens: HoskyToken[];
 }
 
@@ -199,6 +261,7 @@ export type Trait =
 
 export type HoskyMetadata = {
   "-----Traits-----": Trait[];
+  "-----traits-----": Trait[];
   image: string;
   name: string;
 };
