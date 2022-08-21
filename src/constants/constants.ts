@@ -61,6 +61,7 @@ export const FARM_TRAITS: FarmData[] = [
             Hat: ["robin hood"],
             Neck: ["blue collar gold spikes"],
             Eyes: ["visor beam"],
+            Glasses: ["visor beam"],
             Frame: ["poo"],
         }
     },
