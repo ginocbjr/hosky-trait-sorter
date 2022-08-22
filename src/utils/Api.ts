@@ -41,7 +41,8 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
   data.tokens.forEach((nft) => {
     const {
       Background: background,
-      Ear: ear,
+      'Ear Decoration': ear1,
+      'Ear decoration': ear2,
       Eyes: eyes,
       Frame: frame,
       Fur: fur,
@@ -59,7 +60,10 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
       ) {
         return true;
       }
-      if (ear && trait.traits.Ear && trait.traits.Ear.indexOf(ear) >= 0) {
+      if (ear1 && trait.traits["Ear Decoration"] && trait.traits["Ear Decoration"].indexOf(ear1) >= 0) {
+        return true;
+      }
+      if (ear2 && trait.traits["Ear decoration"] && trait.traits["Ear decoration"].indexOf(ear2) >= 0) {
         return true;
       }
       if (eyes && trait.traits.Eyes && trait.traits.Eyes.indexOf(eyes) >= 0) {
@@ -223,7 +227,8 @@ export type NftTraits = {
   traitcount: number;
     '-----traits----- / Background'?: string;
     '-----traits----- / Fur'?: string;
-    '-----traits----- / Ear'?: string;
+    '-----traits----- / Ear Decoration'?: string;
+    '-----traits----- / Ear decoration'?: string;
     '-----traits----- / Mouth Decoration'?: string;
     '-----traits----- / Hat'?: string;
     '-----traits----- / Neck'?: string;
@@ -266,7 +271,8 @@ export interface HoskyToken extends Token {
     traitcount: number;
     Background?: string;
     Fur?: string;
-    Ear?: string;
+    'Ear Decoration'?: string;
+    'Ear decoration'?: string;
     "Mouth Decoration"?: string;
     Hat?: string;
     Neck?: string;
@@ -280,7 +286,8 @@ export interface HoskyToken extends Token {
 
 export type BackgroundTrait = { Background: string };
 export type FurTrait = { Fur: string };
-export type EarTrait = { Ear: string };
+export type EarTrait1 = { 'Ear Decoration': string; };
+export type EarTrait2 = { 'Ear decoration': string; };
 export type MouthDecorTrait = { "Mouth Decoration": string };
 export type HatTrait = { Hat: string };
 export type NeckTrait = { Neck: string };
@@ -292,7 +299,8 @@ export type MouthTrait = { Mouth: string };
 export type Trait =
   | BackgroundTrait
   | FurTrait
-  | EarTrait
+  | EarTrait1
+  | EarTrait2
   | MouthDecorTrait
   | HatTrait
   | NeckTrait
