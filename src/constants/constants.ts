@@ -83,7 +83,7 @@ export const FARM_TRAITS: FarmData[] = [
             Background: ["grey"],
             "Mouth Decoration": ["goatee"],
             Hat: ["hero", "red woody hat", "blue wooly hat", "hero2"],
-            Neck: ["red collar gold spikes", "bowtie"],
+            Neck: ["red collar gold spikes", "bow tie"],
             Glasses: ["visor meh"],
             Frame: ["wood"]
         }
