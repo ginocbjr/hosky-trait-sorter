@@ -11,7 +11,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/:address" element={<Hoskies />}/>
-          <Route path="/listing/:listingId" element={<Listings />}/>
+          <Route path="/listings/:size" element={<Listings />}/>
         </Routes>
       </Router>
     </div>

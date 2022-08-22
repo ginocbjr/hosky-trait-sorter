@@ -121,14 +121,16 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
         if (!result[farm.name]) {
           result[farm.name] = [];
         }
+        const nftName = `${nft.display_name} (${nft.price ?? 0} ADA)`
         result[farm.name].push({
-            name: nft.display_name,
+            name: nftName,
             fingerprint: nft.fingerprint,
         });
       });
     } else {
+      const nftName = `${nft.display_name} (${nft.price ?? 0} ADA)`
       result["NONE"].push({
-        name: nft.display_name,
+        name: nftName,
         fingerprint: nft.fingerprint,
     });
     }
@@ -161,6 +163,7 @@ export async function getListing(ids: string[]): Promise<HoskyData> {
         name: token.display_name,
         metadata: token.onchain_metadata,
         policy: token.policy_id,
+        price: token.listing_lovelace / 1000000,
         traits: {
           traitcount: token.onchain_metadata["-----traits-----"].length,
           ...token.onchain_metadata["-----traits-----"].reduce(
@@ -178,18 +181,46 @@ export async function getListing(ids: string[]): Promise<HoskyData> {
   };
 }
 
+export async function getListings(size: number): Promise<HoskyData> {
+  const policyIds = 'a5bb0e5bb275a573d744a021f9b3bff73595468e002755b447e01559';
+  const url = `https://server.jpgstoreapis.com/search/tokens?policyIds=["${policyIds}"]&saleType=default&sortBy=price-low-to-high&traits={}&nameQuery=&verified=default&pagination={}&size=${size}`
+  const { data } = await axios.get<JpgListings>(url);
+  const { tokens } = data;
+  const hoskyTokens = tokens
+    .filter(
+      (token) =>
+        token.policy_id === policyIds
+    )
+    .map<HoskyToken>((token) => {
+      return {
+        display_name: token.display_name,
+        fingerprint: token.fingerprint,
+        name: token.display_name,
+        metadata: token.onchain_metadata,
+        policy: token.policy_id,
+        price: token.listing_lovelace / 1000000,
+        traits: {
+          traitcount: token.traits.traitcount,
+          ...(Object.keys(token.traits)
+            .filter((trait) => trait !== 'traitCount')
+            .reduce((orig, trait) => ({
+              ...orig,
+                [trait.split(" / ")[1]]: token.traits[trait as keyof NftTraits],
+            }), {})),
+        },
+      };
+    });
+  return {
+    tokens: hoskyTokens,
+  };
+}
+
 export type ListingResponse = {
   tokens: Nft;
 }
 
-export type Nft = {
-  asset_id: string;
-  policy_id: string;
-  display_name: string;
-  onchain_metadata: HoskyMetadata;
-  fingerprint: string;
-  traits: {
-    traitcount: number;
+export type NftTraits = {
+  traitcount: number;
     '-----traits----- / Background'?: string;
     '-----traits----- / Fur'?: string;
     '-----traits----- / Ear'?: string;
@@ -200,7 +231,16 @@ export type Nft = {
     '-----traits----- / Frame'?: string;
     '-----traits----- / Glasses'?: string;
     '-----traits----- / Mouth'?: string;
-  }
+}
+
+export type Nft = {
+  asset_id: string;
+  policy_id: string;
+  display_name: string;
+  onchain_metadata: HoskyMetadata;
+  fingerprint: string;
+  traits: NftTraits,
+  listing_lovelace: number;
 }
 
 export type PoolPmData = {
@@ -235,6 +275,7 @@ export interface HoskyToken extends Token {
     Glasses?: string;
     Mouth?: string;
   };
+  price?: number;
 }
 
 export type BackgroundTrait = { Background: string };
@@ -269,3 +310,15 @@ export type HoskyMetadata = {
 export type TaskResult = {
   [farm: string]: CgNftType[];
 };
+
+export type JpgPagination = {
+  lastHitSort: number[];
+  pointInTimeExpiryMs: number;
+  pointInTimeId: string;
+  total: number;
+}
+
+export type JpgListings = {
+  pagination: JpgPagination;
+  tokens: Nft[];
+}
