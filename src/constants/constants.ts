@@ -11,6 +11,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["pink"],
             Background: ["late night"],
             "Mouth Decoration": ["big moustache"],
+            "Mouth decoration": ["big moustache"],
             Hat: ["crown"],
             Neck: ["blue collar"],
             Glasses: ["visor dead"],
@@ -23,6 +24,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["baby blue"],
             Background: ["poo"],
             "Mouth Decoration": ["tongue out"],
+            "Mouth decoration": ["tongue out"],
             Hat: ["police", "holographic hat"],
             Eyes: ["cyber hosky"],
             Frame: ["check mate"],
@@ -35,6 +37,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["white"],
             Background: ["red", "fireworks"],
             "Mouth Decoration": ["sick"],
+            "Mouth decoration": ["sick"],
             Hat: ["top hat red", "gold ribbon hat"],
             Glasses: ["visor heart"],
             Frame: ["fish bowl"],
@@ -46,7 +49,7 @@ export const FARM_TRAITS: FarmData[] = [
         traits: {
             Fur: ["bear"],
             Background: ["blue"],
-            "Mouth Decoration": ["pizza"],
+            "Mouth decoration": ["pizza"],
             Hat: ["miner", "black lny hat "],
             Glasses: ["gold glasses"],
             Frame: ["lny gold"],
@@ -58,6 +61,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["gold"],
             Background: ["khaki", "fireplace"],
             "Mouth Decoration": ["flaming hot"],
+            "Mouth decoration": ["flaming hot"],
             Hat: ["robin hood"],
             Neck: ["blue collar gold spikes"],
             Glasses: ["visor beam"],
@@ -82,6 +86,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["blue dog"],
             Background: ["grey"],
             "Mouth Decoration": ["goatee"],
+            "Mouth decoration": ["goatee"],
             Hat: ["hero", "red woody hat", "blue wooly hat", "hero2"],
             Neck: ["red collar gold spikes", "bow tie"],
             Glasses: ["visor meh"],
@@ -117,6 +122,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["doberman"],
             Background: ["cyan"],
             "Mouth Decoration": ["rainbow vomit"],
+            "Mouth decoration": ["rainbow vomit"],
             Hat: ["black lny hat"],
             Glasses: ["back to the future"],
             Frame: ["wernis"],
@@ -142,6 +148,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["yellow dog"],
             Background: ["red"],
             "Mouth Decoration": ["crumpet"],
+            "Mouth decoration": ["crumpet"],
             Hat: ["spin top", "santa hat", "mcdonalds manager"],
             Glasses: ["upside down"],
             Frame: ["frosty"],
@@ -153,7 +160,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["hoskrogu"],
             Background: ["sunset"],
             'Ear decoration': ["double stud right"],
-            "Mouth Decoration": ["cigar"],
+            "Mouth decoration": ["cigar"],
             Hat: ["captain"],
             Neck: ["red collar", "chain"],
             Glasses: ["visor"],
@@ -177,7 +184,8 @@ export const FARM_TRAITS: FarmData[] = [
         traits: {
             Fur: ["holographic"],
             Background: ["navy"],
-            "Mouth Decoration": ["snorkle"],
+            "Mouth Decoration": ["snorkel"],
+            "Mouth decoration": ["snorkel"],
             Hat: ["silver crown", "reindeer"],
             Neck: ["eye patch right"],
             Frame: ["test card"],
@@ -189,7 +197,7 @@ export const FARM_TRAITS: FarmData[] = [
         traits: {
             Fur: ["radioactive pink"],
             Background: ["baby blue", "lny blue", "vegas"],
-            "Mouth Decoration": ["cigarette"],
+            "Mouth decoration": ["cigarette"],
             Hat: ["flat peak"],
             Glasses: ["green laser"],
             Frame: ["fairy lights"],
@@ -204,6 +212,7 @@ export const FARM_TRAITS: FarmData[] = [
             'Ear Decoration': ["double right rings"],
             'Ear decoration': ["double right rings"],
             "Mouth Decoration": ["bone"],
+            "Mouth decoration": ["bone"],
             Hat: ["sweatband", "blood poo"],
             Glasses: ["thug life"],
             Frame: ["pernis vs wernis"],
@@ -215,7 +224,7 @@ export const FARM_TRAITS: FarmData[] = [
         traits: {
             Fur: ["x-ray"],
             Background: ["dark black"],
-            "Mouth Decoration": ["tooth"],
+            "Mouth decoration": ["tooth"],
             Hat: ["poo hat", "red lny hat"],
             Glasses: ["yellow laser"],
             Frame: ["warning"],
@@ -228,6 +237,7 @@ export const FARM_TRAITS: FarmData[] = [
             Fur: ["robot"],
             Background: ["space", "fireworks lny"],
             "Mouth Decoration": ["eat poo"],
+            "Mouth decoration": ["eat poo"],
             Hat: ["bandana"],
             Glasses: ["love"],
             Frame: ["green hazmat suit"],
@@ -242,6 +252,7 @@ export const FARM_TRAITS: FarmData[] = [
             'Ear Decoration': ["left ring"],
             'Ear decoration': ["left ring"],
             "Mouth Decoration": ["taco"],
+            "Mouth decoration": ["taco"],
             Hat: ["dude"],
             Glasses: ["eyes patched"],
             Frame: ["orange hazmat suit"],
@@ -261,6 +272,7 @@ export type FarmTrait = {
     'Ear Decoration'?: string[];
     'Ear decoration'?: string[];
     'Mouth Decoration'?: string[];
+    'Mouth decoration'?: string[];
     Hat?: string[];
     Neck?: string[];
     Eyes?: string[];

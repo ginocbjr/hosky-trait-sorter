@@ -47,7 +47,8 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
       Frame: frame,
       Fur: fur,
       Hat: hat,
-      "Mouth Decoration": mouthDecor,
+      "Mouth Decoration": mouthDecor1,
+      "Mouth decoration": mouthDecor2,
       Mouth: mouth,
       Neck: neck,
       Glasses: glasses,
@@ -90,9 +91,16 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
         return true;
       }
       if (
-        mouthDecor &&
+        mouthDecor1 &&
         trait.traits["Mouth Decoration"] &&
-        trait.traits["Mouth Decoration"].indexOf(mouthDecor) >= 0
+        trait.traits["Mouth Decoration"].indexOf(mouthDecor1) >= 0
+      ) {
+        return true;
+      }
+      if (
+        mouthDecor2 &&
+        trait.traits["Mouth decoration"] &&
+        trait.traits["Mouth decoration"].indexOf(mouthDecor2) >= 0
       ) {
         return true;
       }
@@ -167,7 +175,46 @@ export async function getListing(ids: string[]): Promise<HoskyData> {
         name: token.display_name,
         metadata: token.onchain_metadata,
         policy: token.policy_id,
-        price: token.listing_lovelace / 1000000,
+        price: (token.listing_lovelace ?? 0) / 1000000,
+        traits: {
+          traitcount: token.onchain_metadata["-----traits-----"].length,
+          ...token.onchain_metadata["-----traits-----"].reduce(
+            (orig, trait) => ({
+              ...orig,
+              [Object.keys(trait)[0]]: Object.values(trait)[0].toLowerCase(),
+            }),
+            {}
+          ),
+        },
+      };
+    });
+  return {
+    tokens: hoskyTokens,
+  };
+}
+
+export async function getListingsByAddress(address: string): Promise<HoskyData> {
+  const url = `https://server.jpgstoreapis.com/user/${address}/data`;
+  const { data } = await axios.get<JpgAddressListingsResponse>(url);
+  const result = await Promise.all(data.listings.map(async (d) => {
+    const { data } = await axios.get<ListingResponse>(`https://server.jpgstoreapis.com/listing/${d.id}`);
+    return data;
+  }));
+  const tokens: Nft[] = result.map((res) => res.tokens);
+  const hoskyTokens = tokens
+    .filter(
+      (token) =>
+        token.policy_id ===
+        "a5bb0e5bb275a573d744a021f9b3bff73595468e002755b447e01559"
+    )
+    .map<HoskyToken>((token) => {
+      return {
+        display_name: token.display_name,
+        fingerprint: token.fingerprint,
+        name: token.display_name,
+        metadata: token.onchain_metadata,
+        policy: token.policy_id,
+        price: (token.listing_lovelace ?? 0) / 1000000,
         traits: {
           traitcount: token.onchain_metadata["-----traits-----"].length,
           ...token.onchain_metadata["-----traits-----"].reduce(
@@ -230,6 +277,7 @@ export type NftTraits = {
     '-----traits----- / Ear Decoration'?: string;
     '-----traits----- / Ear decoration'?: string;
     '-----traits----- / Mouth Decoration'?: string;
+    '-----traits----- / Mouth decoration'?: string;
     '-----traits----- / Hat'?: string;
     '-----traits----- / Neck'?: string;
     '-----traits----- / Eyes'?: string;
@@ -274,6 +322,7 @@ export interface HoskyToken extends Token {
     'Ear Decoration'?: string;
     'Ear decoration'?: string;
     "Mouth Decoration"?: string;
+    "Mouth decoration"?: string;
     Hat?: string;
     Neck?: string;
     Eyes?: string;
@@ -288,7 +337,8 @@ export type BackgroundTrait = { Background: string };
 export type FurTrait = { Fur: string };
 export type EarTrait1 = { 'Ear Decoration': string; };
 export type EarTrait2 = { 'Ear decoration': string; };
-export type MouthDecorTrait = { "Mouth Decoration": string };
+export type MouthDecorTrait1 = { "Mouth Decoration": string };
+export type MouthDecorTrait2 = { "Mouth decoration": string };
 export type HatTrait = { Hat: string };
 export type NeckTrait = { Neck: string };
 export type EyesTrait = { Eyes: string };
@@ -301,7 +351,8 @@ export type Trait =
   | FurTrait
   | EarTrait1
   | EarTrait2
-  | MouthDecorTrait
+  | MouthDecorTrait1
+  | MouthDecorTrait2
   | HatTrait
   | NeckTrait
   | EyesTrait
@@ -329,4 +380,16 @@ export type JpgPagination = {
 export type JpgListings = {
   pagination: JpgPagination;
   tokens: Nft[];
+}
+
+export type JpgAddressListing = {
+  asset_id: string;
+  collection_display_name: string;
+  display_name: string;
+  id: number;
+  price_lovelace: number;
+}
+
+export type JpgAddressListingsResponse = {
+  listings: JpgAddressListing[];
 }

@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { getListings, sortHoskies } from "../utils/Api";
+import { getListings, getListingsByAddress, sortHoskies } from "../utils/Api";
 import { HoskyPoolProps } from "../hoskies/HoskyPool";
 import Pools from "../hoskies/Pools";
 import { useParams } from 'react-router-dom';
@@ -54,13 +54,21 @@ function Listings() {
     const { size } = useParams();
     useEffect(() => {
         if (size) {
-            getListings(parseInt(size)).then((res) => {
+            if (size.startsWith("stake")) {
+              getListingsByAddress(size).then((res) => {
                 const result = sortHoskies(res);
                 dispatch({ type: 'CALL_LISTINGS_API_SUCCESS', data: result });
-            }).catch((err: Error) => {
-                console.log(err);
-                dispatch({ type: 'CALL_LISTINGS_API_ERROR', data: [], error: err.message });
-            });
+              }).catch((err: Error) => {
+                  dispatch({ type: 'CALL_LISTINGS_API_ERROR', data: [], error: err.message });
+              });
+            } else {
+              getListings(parseInt(size)).then((res) => {
+                const result = sortHoskies(res);
+                dispatch({ type: 'CALL_LISTINGS_API_SUCCESS', data: result });
+              }).catch((err: Error) => {
+                  dispatch({ type: 'CALL_LISTINGS_API_ERROR', data: [], error: err.message });
+              });
+            }
         }
     }, [size]);
     return (
