@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import {
   capitalizeFirstLetter,
   getHoskyDetails,
@@ -11,6 +10,8 @@ import {
 import PriceTable, { PriceData } from './PriceTable';
 
 export type PriceSweepState = {
+  hoskyNum?: string;
+  hoskyNumTemp?: string;
   loading: boolean;
   data: PriceData[];
   error: string;
@@ -20,6 +21,8 @@ export type ActionType = {
   type: string;
   data: PriceData[];
   error?: string;
+  hoskyNum?: string;
+  hoskyNumTemp?: string;
 };
 
 const initialState: PriceSweepState = {
@@ -33,6 +36,20 @@ const priceSweepReducer = (
   action: ActionType,
 ): PriceSweepState => {
   switch (action.type) {
+    case 'SET_SWEEPER_HOSKY_NUM_TEMP': {
+      return {
+        ...state,
+        loading: false,
+        hoskyNumTemp: action.hoskyNumTemp,
+      };
+    }
+    case 'SET_SWEEPER_HOSKY_NUM': {
+      return {
+        ...state,
+        loading: false,
+        hoskyNum: action.hoskyNum,
+      };
+    }
     case 'CALL_SWEEPER_API_START': {
       return {
         ...state,
@@ -60,8 +77,7 @@ const priceSweepReducer = (
 
 const PriceSweep = () => {
   const [state, dispatch] = useReducer(priceSweepReducer, initialState);
-  const { data, loading } = state;
-  const { hoskyNum } = useParams();
+  const { data, loading, hoskyNum, hoskyNumTemp } = state;
   useEffect(() => {
     if (hoskyNum) {
       dispatch({ type: 'CALL_SWEEPER_API_START', data: [] });
@@ -78,10 +94,47 @@ const PriceSweep = () => {
         });
     }
   }, [hoskyNum]);
-  if (loading) {
-    return <Spinner animation="border" />;
-  }
-  return <PriceTable data={data} />;
+  return (
+    <Container>
+      <Form>
+        <Row className="align-items-center">
+          <Col sm={3} className="my-1">
+            <Form.Label htmlFor="inlineFormInputName" visuallyHidden>
+              Hosky Number
+            </Form.Label>
+            <Form.Control
+              id="inlineFormInputName"
+              placeholder="Hosky Number"
+              type="number"
+              onChange={(e) => {
+                dispatch({
+                  type: 'SET_SWEEPER_HOSKY_NUM_TEMP',
+                  hoskyNumTemp: e.target.value,
+                  data: [],
+                });
+              }}
+            />
+          </Col>
+          <Col xs="auto" className="my-1">
+            <Button
+              type="submit"
+              onClick={() => {
+                dispatch({
+                  type: 'SET_SWEEPER_HOSKY_NUM',
+                  data: [],
+                  hoskyNum: hoskyNumTemp,
+                });
+              }}
+              disabled={loading || !hoskyNumTemp}>
+              Sweep It!
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+      {loading && <Spinner animation="border" />}
+      {!loading && <PriceTable data={data} />}
+    </Container>
+  );
 };
 
 const getPriceData = async (num: number): Promise<PriceData[]> => {

@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/:address" element={<Hoskies />} />
           <Route path="/listings/:size" element={<Listings />} />
-          <Route path="/hosky/:hoskyNum" element={<PriceSweep />} />
+          <Route path="/hosky-sweep" element={<PriceSweep />} />
         </Routes>
       </Router>
     </div>
