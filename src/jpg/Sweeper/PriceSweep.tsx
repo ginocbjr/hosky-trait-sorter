@@ -64,7 +64,7 @@ const PriceSweep = () => {
   const { hoskyNum } = useParams();
   useEffect(() => {
     if (hoskyNum) {
-      dispatch({ type: 'CALL_SWEEPER_API_START', data });
+      dispatch({ type: 'CALL_SWEEPER_API_START', data: [] });
       getPriceData(parseInt(hoskyNum))
         .then((data) => {
           dispatch({ type: 'CALL_SWEEPER_API_SUCCESS', data });
