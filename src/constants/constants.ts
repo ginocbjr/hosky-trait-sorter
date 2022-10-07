@@ -19,7 +19,7 @@ export const FARM_TRAITS: FarmData[] = [
         }
     },
     {
-        name: "ABC",
+        name: "BONE",
         traits: {
             Fur: ["baby blue"],
             Background: ["poo"],
@@ -32,7 +32,7 @@ export const FARM_TRAITS: FarmData[] = [
         }
     },
     {
-        name: "ALLI",
+        name: "LIDO",
         traits: {
             Fur: ["white"],
             Background: ["red", "fireworks"],

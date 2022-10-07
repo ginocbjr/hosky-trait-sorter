@@ -5,48 +5,48 @@ import Pools from "../hoskies/Pools";
 import { useParams } from 'react-router-dom';
 
 export type HoskyState = {
-    loading: boolean; 
-    data: HoskyPoolProps[];
-    error: string;
-  }
-  
-  export type ActionType = {
-    type: string;
-    data: HoskyPoolProps[],
-    error?: string;
-  }
-  
-  const hoskyReducer = (state: HoskyState, action: ActionType): HoskyState => {
-    switch(action.type) {
-      case 'CALL_LISTINGS_API_START': {
-        return {
-          ...state,
-          loading: true,
-        };
-      }
-      case 'CALL_LISTINGS_API_SUCCESS': {
-        return {
-          ...state,
-          loading: false,
-          data: action.data,
-        }
-      }
-      case 'CALL_LISTINGS_API_ERROR': {
-        return {
-          ...state,
-          loading: false,
-          error: action.error!,
-        }
-      }
-      default: return initialState;
+  loading: boolean;
+  data: HoskyPoolProps[];
+  error: string;
+}
+
+export type ActionType = {
+  type: string;
+  data: HoskyPoolProps[],
+  error?: string;
+}
+
+const hoskyReducer = (state: HoskyState, action: ActionType): HoskyState => {
+  switch(action.type) {
+    case 'CALL_LISTINGS_API_START': {
+      return {
+        ...state,
+        loading: true,
+      };
     }
+    case 'CALL_LISTINGS_API_SUCCESS': {
+      return {
+        ...state,
+        loading: false,
+        data: action.data,
+      }
+    }
+    case 'CALL_LISTINGS_API_ERROR': {
+      return {
+        ...state,
+        loading: false,
+        error: action.error!,
+      }
+    }
+    default: return initialState;
   }
-  
-  const initialState: HoskyState = {
-    loading: false,
-    data: [],
-    error: '',
-  }
+}
+
+const initialState: HoskyState = {
+  loading: false,
+  data: [],
+  error: '',
+}
   
 function Listings() {
     const [state, dispatch] = useReducer(hoskyReducer, initialState);
