@@ -117,7 +117,7 @@ const PriceSweep = () => {
           </Col>
           <Col xs="auto" className="my-1">
             <Button
-              type="submit"
+              type="button"
               onClick={() => {
                 dispatch({
                   type: 'SET_SWEEPER_HOSKY_NUM',
