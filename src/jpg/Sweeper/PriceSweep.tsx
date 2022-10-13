@@ -152,7 +152,7 @@ const getPriceData = async (num: number): Promise<PriceData[]> => {
             [traitsParam]: [name.toLowerCase()],
           });
           const jpgTrxns = await getJpgTransactions({
-            trait: traitsParam,
+            trait: `-----traits----- / ${traitsParam}`,
             name,
           }).catch((err) => {
             return null;

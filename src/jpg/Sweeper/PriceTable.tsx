@@ -8,7 +8,7 @@ const Activities = ({ activities }: { activities: string[] }) => {
   return (
     <>
       {activities.map((activity, idx) => (
-        <span>
+        <span key={`activity-${idx}`}>
           {activity}
           {idx < activities.length - 1 ? ', ' : ''}
         </span>
@@ -32,7 +32,7 @@ const CreateTable = ({ data }: { data: PriceData[] }) => {
         {data.length > 0 &&
           data.map((price) => {
             return (
-              <tr>
+              <tr key={`${price.trait}-${price.name}`}>
                 <td>{price.trait}</td>
                 <td>{price.name}</td>
                 <td>{price.floorPrice || 'None'}</td>
