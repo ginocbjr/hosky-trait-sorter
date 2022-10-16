@@ -1,5 +1,13 @@
 import React, { useEffect, useReducer } from 'react';
-import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Image,
+  Row,
+  Spinner,
+} from 'react-bootstrap';
 import {
   capitalizeFirstLetter,
   getHoskyDetails,
@@ -14,12 +22,14 @@ export type PriceSweepState = {
   hoskyNumTemp?: string;
   loading: boolean;
   data: PriceData[];
+  source?: string;
   error: string;
 };
 
 export type ActionType = {
   type: string;
   data: PriceData[];
+  source?: string;
   error?: string;
   hoskyNum?: string;
   hoskyNumTemp?: string;
@@ -28,6 +38,7 @@ export type ActionType = {
 const initialState: PriceSweepState = {
   loading: false,
   data: [],
+  source: '',
   error: '',
 };
 
@@ -61,6 +72,7 @@ const priceSweepReducer = (
         ...state,
         loading: false,
         data: action.data,
+        source: action.source,
       };
     }
     case 'CALL_SWEEPER_API_ERROR': {
@@ -77,13 +89,17 @@ const priceSweepReducer = (
 
 const PriceSweep = () => {
   const [state, dispatch] = useReducer(priceSweepReducer, initialState);
-  const { data, loading, hoskyNum, hoskyNumTemp } = state;
+  const { source, data, loading, hoskyNum, hoskyNumTemp } = state;
   useEffect(() => {
     if (hoskyNum) {
       dispatch({ type: 'CALL_SWEEPER_API_START', data: [] });
       getPriceData(parseInt(hoskyNum))
-        .then((data) => {
-          dispatch({ type: 'CALL_SWEEPER_API_SUCCESS', data });
+        .then((resp) => {
+          dispatch({
+            type: 'CALL_SWEEPER_API_SUCCESS',
+            data: resp.data,
+            source: resp.image,
+          });
         })
         .catch((err) => {
           dispatch({
@@ -132,12 +148,30 @@ const PriceSweep = () => {
         </Row>
       </Form>
       {loading && <Spinner animation="border" />}
-      {!loading && <PriceTable data={data} />}
+      {!loading && (
+        <Container fluid>
+          <Row>
+            <Col>
+              <Image
+                width={'100%'}
+                src={
+                  source
+                    ? `https://ipfs.io/ipfs/${source}`
+                    : 'https://via.placeholder.com/150?text=Hosky+404'
+                }
+              />
+            </Col>
+            <Col sm={9}>
+              <PriceTable data={data} />
+            </Col>
+          </Row>
+        </Container>
+      )}
     </Container>
   );
 };
 
-const getPriceData = async (num: number): Promise<PriceData[]> => {
+const getPriceData = async (num: number): Promise<PriceSweepData> => {
   const nft = await getHoskyDetails(num);
   if (nft) {
     const { traits } = nft;
@@ -171,9 +205,20 @@ const getPriceData = async (num: number): Promise<PriceData[]> => {
           };
         }),
     );
-    return data.sort((d1, d2) => (d2.floorPrice || 0) - (d1.floorPrice || 0));
+    return {
+      image: nft.source,
+      data: data.sort((d1, d2) => (d2.floorPrice || 0) - (d1.floorPrice || 0)),
+    };
   }
-  return [];
+  return {
+    image: '',
+    data: [],
+  };
+};
+
+export type PriceSweepData = {
+  image: string;
+  data: PriceData[];
 };
 
 export default PriceSweep;

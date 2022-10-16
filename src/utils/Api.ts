@@ -375,6 +375,7 @@ export type Nft = {
   fingerprint: string;
   traits: NftTraits;
   listing_lovelace: number;
+  source: string;
 };
 
 export type PoolPmData = {
