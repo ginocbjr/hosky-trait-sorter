@@ -183,7 +183,7 @@ const getPriceData = async (num: number): Promise<PriceSweepData> => {
           const name = traits[trait as keyof NftTraits] as string;
           const traitsParam = capitalizeFirstLetter(actualTrait);
           const listings = await getListings(2, {
-            [traitsParam]: [name.toLowerCase()],
+            [`-----traits----- / ${traitsParam}`]: [name.toLowerCase()],
           });
           const jpgTrxns = await getJpgTransactions({
             trait: `-----traits----- / ${traitsParam}`,
