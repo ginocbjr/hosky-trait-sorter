@@ -34,6 +34,17 @@ export async function getHoskies(address: string): Promise<HoskyData> {
   };
 }
 
+const hasTrait = (traits?: string[], trait?: string): boolean => {
+  if (
+    trait &&
+    traits &&
+    traits.map((t) => t.toLowerCase()).indexOf(trait) >= 0
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
   const result: TaskResult = {
     NONE: [],
@@ -54,72 +65,40 @@ export function sortHoskies(data: HoskyData, farm?: string): HoskyPoolProps[] {
       Glasses: glasses,
     } = nft.traits;
     const found = FARM_TRAITS.filter((trait) => {
-      if (
-        background &&
-        trait.traits.Background &&
-        trait.traits.Background.indexOf(background) >= 0
-      ) {
+      if (hasTrait(trait.traits.Background, background)) {
         return true;
       }
-      if (
-        ear1 &&
-        trait.traits['Ear Decoration'] &&
-        trait.traits['Ear Decoration'].indexOf(ear1) >= 0
-      ) {
+      if (hasTrait(trait.traits['Ear Decoration'], ear1)) {
         return true;
       }
-      if (
-        ear2 &&
-        trait.traits['Ear decoration'] &&
-        trait.traits['Ear decoration'].indexOf(ear2) >= 0
-      ) {
+      if (hasTrait(trait.traits['Ear decoration'], ear2)) {
         return true;
       }
-      if (eyes && trait.traits.Eyes && trait.traits.Eyes.indexOf(eyes) >= 0) {
+      if (hasTrait(trait.traits.Eyes, eyes)) {
         return true;
       }
-      if (
-        frame &&
-        trait.traits.Frame &&
-        trait.traits.Frame.indexOf(frame) >= 0
-      ) {
+      if (hasTrait(trait.traits.Frame, frame)) {
         return true;
       }
-      if (fur && trait.traits.Fur && trait.traits.Fur.indexOf(fur) >= 0) {
+      if (hasTrait(trait.traits.Fur, fur)) {
         return true;
       }
-      if (
-        glasses &&
-        trait.traits.Glasses &&
-        trait.traits.Glasses.indexOf(glasses) >= 0
-      ) {
+      if (hasTrait(trait.traits.Glasses, glasses)) {
         return true;
       }
-      if (hat && trait.traits.Hat && trait.traits.Hat.indexOf(hat) >= 0) {
+      if (hasTrait(trait.traits.Hat, hat)) {
         return true;
       }
-      if (
-        mouthDecor1 &&
-        trait.traits['Mouth Decoration'] &&
-        trait.traits['Mouth Decoration'].indexOf(mouthDecor1) >= 0
-      ) {
+      if (hasTrait(trait.traits['Mouth Decoration'], mouthDecor1)) {
         return true;
       }
-      if (
-        mouthDecor2 &&
-        trait.traits['Mouth decoration'] &&
-        trait.traits['Mouth decoration'].indexOf(mouthDecor2) >= 0
-      ) {
+      if (hasTrait(trait.traits['Mouth decoration'], mouthDecor2)) {
         return true;
       }
-      if (
-        mouth &&
-        trait.traits.Mouth &&
-        trait.traits.Mouth.indexOf(mouth) >= 0
-      ) {
+      if (hasTrait(trait.traits.Mouth, mouth)) {
         return true;
       }
-      if (neck && trait.traits.Neck && trait.traits.Neck.indexOf(neck) >= 0) {
+      if (hasTrait(trait.traits.Neck, neck)) {
         return true;
       }
       return false;
